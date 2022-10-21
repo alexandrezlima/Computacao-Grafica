@@ -189,6 +189,7 @@ Makefile: ../desenha_quadrado/desenha_quadrado.pro E:/Programas/Qt/6.3.2/mingw_6
 		E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/qt_config.prf \
 		E:/Programas/Qt/6.3.2/mingw_64/mkspecs/win32-g++/qmake.conf \
 		E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/exclusive_builds.prf \
 		E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/toolchain.prf \
 		E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/default_pre.prf \
@@ -220,8 +221,8 @@ Makefile: ../desenha_quadrado/desenha_quadrado.pro E:/Programas/Qt/6.3.2/mingw_6
 		E:/Programas/Qt/6.3.2/mingw_64/lib/Qt6Gui.prl \
 		E:/Programas/Qt/6.3.2/mingw_64/lib/Qt6Core.prl \
 		E:/Programas/Qt/6.3.2/mingw_64/lib/Qt6EntryPoint.prl \
-		.qmake.stash \
-		E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/build_pass.prf
+		E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/build_pass.prf \
+		../desenha_quadrado/resources.qrc
 	$(QMAKE) -o Makefile ../desenha_quadrado/desenha_quadrado.pro -spec win32-g++ CONFIG+=debug CONFIG+=qml_debug
 E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/spec_pre.prf:
 E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/device_config.prf:
@@ -342,6 +343,7 @@ E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/qt_functions.prf:
 E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/qt_config.prf:
 E:/Programas/Qt/6.3.2/mingw_64/mkspecs/win32-g++/qmake.conf:
 E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/exclusive_builds.prf:
 E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/toolchain.prf:
 E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/default_pre.prf:
@@ -373,8 +375,8 @@ E:/Programas/Qt/6.3.2/mingw_64/lib/Qt6Widgets.prl:
 E:/Programas/Qt/6.3.2/mingw_64/lib/Qt6Gui.prl:
 E:/Programas/Qt/6.3.2/mingw_64/lib/Qt6Core.prl:
 E:/Programas/Qt/6.3.2/mingw_64/lib/Qt6EntryPoint.prl:
-.qmake.stash:
 E:/Programas/Qt/6.3.2/mingw_64/mkspecs/features/build_pass.prf:
+../desenha_quadrado/resources.qrc:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ../desenha_quadrado/desenha_quadrado.pro -spec win32-g++ CONFIG+=debug CONFIG+=qml_debug
 

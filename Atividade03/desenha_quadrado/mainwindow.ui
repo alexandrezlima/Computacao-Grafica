@@ -16,12 +16,16 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="OpenGLWidget" name="openGLWidget"/>
+     <widget class="OpenGLWidget" name="openGLWidget">
+      <property name="focusPolicy">
+       <enum>Qt::StrongFocus</enum>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QCheckBox" name="checkBoxDarkMode">
       <property name="text">
-       <string>Dark Mode</string>
+       <string>Alterar tempo</string>
       </property>
      </widget>
     </item>

@@ -42,6 +42,7 @@ public:
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         openGLWidget = new OpenGLWidget(centralwidget);
         openGLWidget->setObjectName(QString::fromUtf8("openGLWidget"));
+        openGLWidget->setFocusPolicy(Qt::StrongFocus);
 
         verticalLayout->addWidget(openGLWidget);
 
@@ -68,7 +69,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "Computa\303\247\303\243o Gr\303\241fica - Atividade 03", nullptr));
-        checkBoxDarkMode->setText(QCoreApplication::translate("MainWindow", "Dark Mode", nullptr));
+        checkBoxDarkMode->setText(QCoreApplication::translate("MainWindow", "Alterar tempo", nullptr));
     } // retranslateUi
 
 };
