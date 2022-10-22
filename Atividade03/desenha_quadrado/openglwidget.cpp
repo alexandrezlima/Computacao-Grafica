@@ -27,7 +27,6 @@ void OpenGLWidget::initializeGL()
 
    createShaders();
    //createVBOs();
-   setupModels();
 }
 
 void OpenGLWidget::resizeGL(int w, int h)
@@ -37,83 +36,25 @@ void OpenGLWidget::resizeGL(int w, int h)
 void OpenGLWidget::paintGL()
 {
 
-    //glClear(GL_COLOR_BUFFER_BIT);
-    //setupModels();
+    glClear(GL_COLOR_BUFFER_BIT);
 
     //Sinaliza a possibilidade do uso dos shaders.
-    glUseProgram(m_program);
-    glBindVertexArray(m_VAO);
+    glUseProgram(shaderProgram);
 
+    drawHouseBase();
+    glBindVertexArray(vaoHB);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    glBindVertexArray(0);
-    glUseProgram(0);
-}
+    drawHouseRoof();
+    glBindVertexArray(vaoHF);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
-void OpenGLWidget::setupModels()
-{
+    drawHouseWindow();
+    glBindVertexArray(vaoHW);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    glDeleteBuffers(1, &m_VBOPositions);
-    glDeleteBuffers(1, &m_VBOColors);
-    glDeleteVertexArrays(1, &m_VAO);
+    //glDrawArrays(GL_TRIANGLE_FAN, 0, steps);
 
-    std::vector<QVector4D>  i_vertices;
-    std::vector<QVector4D>  i_colors;
-    std::vector<GLuint>     i_indices;
-
-    i_vertices.resize(4);
-    i_colors.resize(4);
-    i_indices.resize(6);
-
-    i_vertices[0] = QVector4D(-0.5, -0.5 , 0, 1);
-    i_vertices[1] = QVector4D( 0.5, -0.5 , 0, 1);
-    i_vertices[2] = QVector4D( 0.5, 0.5 , 0, 1);
-    i_vertices[3] = QVector4D(-0.5, 0.5 , 0, 1);
-
-    // Generate VBO of positions
-    glGenBuffers(1, &m_VBOPositions);
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBOPositions);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(i_vertices), i_vertices.data(),
-                 GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    //Cria as cores para os vértices.
-    i_colors[0] = QVector4D(1, 0, 0, 1); // Red
-    i_colors[1] = QVector4D(0, 1, 0, 1); // Green
-    i_colors[2] = QVector4D(0, 0, 1, 1); // Blue
-    i_colors[3] = QVector4D(1, 1, 0, 1); // Yellow
-
-    // Generate VBO of colors
-    glGenBuffers(1, &m_VBOColors);
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBOColors);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(i_colors), i_colors.data(),
-                 GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-
-    // Get location of attributes in the program
-    auto const positionAttribute{glGetAttribLocation(m_program, "vPosition")};
-    auto const colorAttribute{glGetAttribLocation(m_program, "vColors")};
-
-    // Create VAO
-    glGenVertexArrays(1, &m_VAO);
-
-    // Bind vertex attributes to current VAO
-    glBindVertexArray(m_VAO);
-
-    glEnableVertexAttribArray(positionAttribute);
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBOPositions);
-    glVertexAttribPointer(positionAttribute, 2, GL_FLOAT, GL_FALSE, 0,
-                                  nullptr);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glEnableVertexAttribArray(colorAttribute);
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBOColors);
-    glVertexAttribPointer(colorAttribute, 4, GL_FLOAT, GL_FALSE, 0,
-                                  nullptr);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glBindVertexArray(0);
 
 }
 
@@ -181,32 +122,30 @@ void OpenGLWidget::createShaders()
     }
 
     //Cria shader program, inteiro que identifica o programa de shader composto pelo par de vertex/fragment shader.
-    m_program = glCreateProgram();
-    glAttachShader(m_program, vertexShader);
-    glAttachShader(m_program, fragmentShader);
-    glLinkProgram(m_program);
-
-
+    shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
 
     GLint isLinked{0};
-    glGetProgramiv(m_program,GL_LINK_STATUS, &isLinked);
+    glGetProgramiv(shaderProgram,GL_LINK_STATUS, &isLinked);
 
     if(isLinked == GL_FALSE)
     {
         GLint maxLength{0};
-        glGetProgramiv(m_program,GL_INFO_LOG_LENGTH,&maxLength);
+        glGetProgramiv(shaderProgram,GL_INFO_LOG_LENGTH,&maxLength);
         std::vector<GLchar> infoLog(maxLength);
-        glGetProgramInfoLog(m_program,maxLength,&maxLength, &infoLog[0]);
+        glGetProgramInfoLog(shaderProgram,maxLength,&maxLength, &infoLog[0]);
         qDebug("%s",&infoLog[0]);
-        glDeleteProgram(m_program);
+        glDeleteProgram(shaderProgram);
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
         return;
     }
 
 
-    glDetachShader(m_program,vertexShader);
-    glDetachShader(m_program,fragmentShader);
+    glDetachShader(shaderProgram,vertexShader);
+    glDetachShader(shaderProgram,fragmentShader);
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
@@ -220,58 +159,36 @@ void OpenGLWidget::destroyShaders()
 }
 
 //Cria VBOs
-void OpenGLWidget::createVBOs()
+void OpenGLWidget::createVBOs(GLuint &theVAO, GLuint &theVBO, GLuint &theColors, GLuint &theEBO)
 {
     makeCurrent();
 
     //Libera os VBOs atuais, caso já tenham sido criados. Importante para não consumir toda memória da GPU.
     destroyVBOs();
 
-    //reconfigura o array de vértices, colors e índices.
-    vertices.resize(4);
-    colors.resize(4);
-    indices.resize(6); //2*3 -> dois triângulos.
-
-    //Define a posição dos vértices, inserindo-as no array.
-    vertices[0] = QVector4D(-0.5, -0.5 , 0, 1);
-    vertices[1] = QVector4D( 0.5, -0.5 , 0, 1);
-    vertices[2] = QVector4D( 0.5, 0.5 , 0, 1);
-    vertices[3] = QVector4D(-0.5, 0.5 , 0, 1);
-
-
-    //Cria as cores para os vértices.
-    colors[0] = QVector4D(1, 0, 0, 1); // Red
-    colors[1] = QVector4D(0, 1, 0, 1); // Green
-    colors[2] = QVector4D(0, 0, 1, 1); // Blue
-    colors[3] = QVector4D(1, 1, 0, 1); // Yellow
-
-    //Gera a topologia do retângulo.
-    indices[0] = 0; indices[1] = 1; indices[2] = 2;
-    indices[3] = 2; indices[4] = 3; indices[5] = 0;
-
     //Cria VAO
-    glGenVertexArrays(1, &vao);
+    glGenVertexArrays(1, &theVAO);
     //Associa atributos vertex ao VAO atual
-    glBindVertexArray(vao);
+    glBindVertexArray(theVAO);
 
     //Gera VBO de posições (vértices)
-    glGenBuffers(1, &vboVertices);
-    glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
+    glGenBuffers(1, &theVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, theVBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(QVector4D), vertices.data(), GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
     glEnableVertexAttribArray(0);
 
     //Gera VBO de cores
-    glGenBuffers (1, &vboColors);
-    glBindBuffer (GL_ARRAY_BUFFER, vboColors);
+    glGenBuffers (1, &theColors);
+    glBindBuffer (GL_ARRAY_BUFFER, theColors);
     glBufferData (GL_ARRAY_BUFFER, colors.size()*sizeof(QVector4D), colors.data(), GL_STATIC_DRAW);
 
     glVertexAttribPointer (1, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
     glEnableVertexAttribArray (1);
 
-    glGenBuffers (1, &eboIndices);
-    glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, eboIndices);
+    glGenBuffers (1, &theEBO);
+    glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, theEBO);
     glBufferData (GL_ELEMENT_ARRAY_BUFFER, indices.size()*sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 }
 
@@ -281,18 +198,25 @@ void OpenGLWidget::destroyVBOs()
     makeCurrent ();
 
     //Deleta buffers.
-    glDeleteBuffers(1, &vboVertices);
-    glDeleteBuffers(1, &vboColors);
-    glDeleteBuffers(1, &eboIndices);
-
+    glDeleteBuffers(1, &vboHB);
+    glDeleteBuffers(1, &vboColorHB);
+    glDeleteBuffers(1, &eboHB);
     //Deleta vértices.
-    glDeleteVertexArrays(1, &vao);
+    glDeleteVertexArrays(1, &vaoHB);
 
-    //Reseta variáveis.
-    vboVertices=0;
-    eboIndices=0;
-    vboColors=0;
-    vao=0;
+    //Deleta buffers.
+    glDeleteBuffers(1, &vboHF);
+    glDeleteBuffers(1, &vboColorHF);
+    glDeleteBuffers(1, &eboHF);
+    //Deleta vértices.
+    glDeleteVertexArrays(1, &vaoHF);
+
+    //Deleta buffers.
+    glDeleteBuffers(1, &vboHW);
+    glDeleteBuffers(1, &vboColorHW);
+    glDeleteBuffers(1, &eboHW);
+    //Deleta vértices.
+    glDeleteVertexArrays(1, &vaoHW);
 }
 
 //Altera alguns elementos da cena, como céu sol/lua e a janela da casa.
@@ -305,7 +229,7 @@ void OpenGLWidget::toggleDarkMode(bool changeToDarkMode)
     if(changeToDarkMode)
     {
         //Céu escuro. Noite.
-        glClearColor(0,0.2,0.6,1);
+        glClearColor(0,0.1,0.3,1);
     }
     else
     {
@@ -325,74 +249,122 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void OpenGLWidget::drawSunMoon()
+//Desenha a base da casa.
+void OpenGLWidget::drawHouseBase()
 {
-    std::vector<QVector4D> vertices2;
-    std::vector<QVector4D> colors2;
-    std::vector<GLuint> indices2;
-
-    //Declaração dos VBOs e VAOs
-    GLuint vboVertices2{0};
-    GLuint vboColors2{0};
-    GLuint eboIndices2{0};
-    GLuint vao2{0};
-
-    makeCurrent();
-    glUseProgram(shaderProgram);
-
-    glBindVertexArray(vaoSunMoon);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, steps);
-
-
-    makeCurrent();
-
-    //Libera os VBOs atuais, caso já tenham sido criados. Importante para não consumir toda memória da GPU.
-    destroyVBOs();
-
     //reconfigura o array de vértices, colors e índices.
-    vertices2.resize(4);
-    colors2.resize(4);
-    indices2.resize(6); //2*3 -> dois triângulos.
+    vertices.resize(4);
+    colors.resize(4);
+    indices.resize(6); //2*3 -> dois triângulos.
 
     //Define a posição dos vértices, inserindo-as no array.
-    vertices2[0] = QVector4D(0, 0 , 0, 1);
-    vertices2[1] = QVector4D( 0.6, -0.6 , 0, 1);
-    vertices2[2] = QVector4D( 0.6, 0.6 , 0, 1);
-    vertices2[3] = QVector4D(-0.6, 0.6 , 0, 1);
+    vertices[0] = QVector4D(0, -0.9, 0, 1);
+    vertices[1] = QVector4D(-0.9, -0.9, 0, 1);
+    vertices[2] = QVector4D(-0.9, 0, 0, 1);
+    vertices[3] = QVector4D(0, 0, 0, 1);
 
 
     //Cria as cores para os vértices.
-    colors2[0] = QVector4D(0, 0, 0, 1); // Red
-    colors2[1] = QVector4D(0, 0, 0, 1); // Green
-    colors2[2] = QVector4D(0, 0, 0, 1); // Blue
-    colors2[3] = QVector4D(0, 0, 0, 1); // Yellow
+    colors[0] = QVector4D(0.5, 0.5, 0.5, 1);
+    colors[1] = QVector4D(0.5, 0.5, 0.5, 1);
+    colors[2] = QVector4D(0.5, 0.5, 0.5, 1);
+    colors[3] = QVector4D(0.5, 0.5, 0.5, 1);
 
     //Gera a topologia do retângulo.
-    indices2[0] = 0; indices2[1] = 1; indices2[2] = 2;
-    indices2[3] = 2; indices2[4] = 3; indices2[5] = 0;
+    indices[0] = 0; indices[1] = 1; indices[2] = 2;
+    indices[3] = 2; indices[4] = 3; indices[5] = 0;
 
-    //Cria VAO
-    glGenVertexArrays(1, &vao2);
-    //Associa atributos vertex ao VAO atual
-    glBindVertexArray(vao2);
+    createVBOs(vaoHB, vboHB, vboColorHB, eboHB);
 
-    //Gera VBO de posições (vértices)
-    glGenBuffers(1, &vboVertices2);
-    glBindBuffer(GL_ARRAY_BUFFER, vboVertices2);
-    glBufferData(GL_ARRAY_BUFFER, vertices2.size()*sizeof(QVector4D), vertices2.data(), GL_STATIC_DRAW);
+}
 
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glEnableVertexAttribArray(0);
+//Desenha o telhado da casa.
+void OpenGLWidget::drawHouseRoof()
+{
+    //reconfigura o array de vértices, colors e índices.
+    vertices.resize(3);
+    colors.resize(3);
+    indices.resize(3); //1*3 -> um triângulo.
 
-    //Gera VBO de cores
-    glGenBuffers (1, &vboColors2);
-    glBindBuffer (GL_ARRAY_BUFFER, vboColors2);
-    glBufferData (GL_ARRAY_BUFFER, colors2.size()*sizeof(QVector4D), colors2.data(), GL_STATIC_DRAW);
+    //Define a posição dos vértices, inserindo-as no array.
+    vertices[0] = QVector4D(-0.9, 0.01, 0, 1);
+    vertices[1] = QVector4D(0, 0.01, 0, 1);
+    vertices[2] = QVector4D(-0.425, 0.5, 0, 1);
 
-    glVertexAttribPointer (1, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glEnableVertexAttribArray (1);
 
-    glGenBuffers (1, &eboIndices2);
-    glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, eboIndices2);
-    glBufferData (GL_ELEMENT_ARRAY_BUFFER, indices2.size()*sizeof(GLuint), indices2.data(), GL_STATIC_DRAW);
+    //Cria as cores para os vértices.
+    colors[0] = QVector4D(1, 0.5, 0.5, 1);
+    colors[1] = QVector4D(1, 0.5, 0.5, 1);
+    colors[2] = QVector4D(1, 0.5, 0.5, 1);
+
+    //Gera a topologia do retângulo.
+    indices[0] = 0; indices[1] = 1; indices[2] = 2;
+
+    createVBOs(vaoHF, vboHF, vboColorHF, eboHF);
+
+}
+
+void OpenGLWidget::drawSunMoon()
+{
+
+    //reconfigura o array de vértices, colors e índices.
+    vertices.resize(4);
+    colors.resize(4);
+    indices.resize(6); //3*3 -> três triângulos.
+
+    //Define a posição dos vértices, inserindo-as no array.
+    vertices[0] = QVector4D(0, -0.9, 0, 1);
+    vertices[1] = QVector4D(0.9, -0.9, 0, 1);
+    vertices[2] = QVector4D(0.9, 0, 0, 1);
+    vertices[3] = QVector4D(0, 0, 0, 1);
+
+
+    //Cria as cores para os vértices.
+    colors[0] = QVector4D(0.5, 0.5, 0.5, 1);
+    colors[1] = QVector4D(0.5, 0.5, 0.5, 1);
+    colors[2] = QVector4D(0.5, 0.5, 0.5, 1);
+    colors[3] = QVector4D(0.5, 0.5, 0.5, 1);
+
+    //Gera a topologia do retângulo.
+    indices[0] = 0; indices[1] = 1; indices[2] = 2;
+    indices[3] = 2; indices[4] = 3; indices[5] = 0;
+
+    createVBOs(vao2, vboVertices2, vboColors2, eboIndices2);
+}
+
+void OpenGLWidget::drawHouseWindow()
+{
+    //reconfigura o array de vértices, colors e índices.
+    vertices.resize(4);
+    colors.resize(4);
+    indices.resize(6); //2*3 -> dois triângulos.
+
+    //Define a posição dos vértices, inserindo-as no array.
+    vertices[0] = QVector4D(-0.1, -0.5, 0, 1);
+    vertices[1] = QVector4D(-0.3, -0.5, 0, 1);
+    vertices[2] = QVector4D(-0.3, -0.2, 0, 1);
+    vertices[3] = QVector4D(-0.1, -0.2, 0, 1);
+
+
+    if (isDay) {
+        //Cria as cores para os vértices.
+        colors[0] = QVector4D(1, 1, 1, 1);
+        colors[1] = QVector4D(1, 1, 1, 1);
+        colors[2] = QVector4D(1, 1, 1, 1);
+        colors[3] = QVector4D(1, 1, 1, 1);
+    } else {
+        //Cria as cores para os vértices.
+        colors[0] = QVector4D(1, 1, 0, 1);
+        colors[1] = QVector4D(1, 1, 0, 1);
+        colors[2] = QVector4D(1, 1, 0, 1);
+        colors[3] = QVector4D(1, 1, 0, 1);
+    }
+
+
+    //Gera a topologia do retângulo.
+    indices[0] = 0; indices[1] = 1; indices[2] = 2;
+    indices[3] = 2; indices[4] = 3; indices[5] = 0;
+
+    createVBOs(vaoHW, vboHW, vboColorHW, eboHW);
+
 }
