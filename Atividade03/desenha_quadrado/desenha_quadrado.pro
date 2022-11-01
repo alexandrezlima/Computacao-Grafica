@@ -10,13 +10,25 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    bullets.cpp \
+    enemy.cpp \
+    gamedata.cpp \
     main.cpp \
     mainwindow.cpp \
-    openglwidget.cpp
+    openglwidget.cpp \
+    player.cpp \
+    power.cpp \
+    starlayers.cpp
 
 HEADERS += \
+    bullets.h \
+    enemy.h \
+    gamedata.h \
     mainwindow.h \
-    openglwidget.h
+    openglwidget.h \
+    player.h \
+    power.h \
+    starlayers.h
 
 FORMS += \
     mainwindow.ui

@@ -1,0 +1,17 @@
+release/bullets.o
+release/enemy.o
+release/gamedata.o
+release/main.o
+release/mainwindow.o
+release/openglwidget.o
+release/player.o
+release/power.o
+release/starlayers.o
+release/qrc_resources.o
+release/moc_bullets.o
+release/moc_enemy.o
+release/moc_mainwindow.o
+release/moc_openglwidget.o
+release/moc_player.o
+release/moc_power.o
+release/moc_starlayers.o
