@@ -11,7 +11,6 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
@@ -27,7 +26,6 @@ public:
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     OpenGLWidget *openGLWidget;
-    QCheckBox *checkBoxDarkMode;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -35,7 +33,8 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(800, 600);
+        MainWindow->resize(940, 526);
+        MainWindow->setAutoFillBackground(true);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -46,30 +45,23 @@ public:
 
         verticalLayout->addWidget(openGLWidget);
 
-        checkBoxDarkMode = new QCheckBox(centralwidget);
-        checkBoxDarkMode->setObjectName(QString::fromUtf8("checkBoxDarkMode"));
-
-        verticalLayout->addWidget(checkBoxDarkMode);
-
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 21));
+        menubar->setGeometry(QRect(0, 0, 940, 21));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
         MainWindow->setStatusBar(statusbar);
 
         retranslateUi(MainWindow);
-        QObject::connect(checkBoxDarkMode, SIGNAL(clicked(bool)), openGLWidget, SLOT(toggleDarkMode(bool)));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "Computa\303\247\303\243o Gr\303\241fica - Atividade 03", nullptr));
-        checkBoxDarkMode->setText(QCoreApplication::translate("MainWindow", "Alterar tempo", nullptr));
+        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "Hit Shooter - Computa\303\247\303\243o Gr\303\241fica - Atividade 04", nullptr));
     } // retranslateUi
 
 };

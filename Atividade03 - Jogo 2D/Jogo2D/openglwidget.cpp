@@ -11,8 +11,10 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QOpenGLWidget(parent)
 //Destrutor da classe OpenGLWidget.
 OpenGLWidget::~OpenGLWidget()
 {
+
     destroyVBOs();
     destroyShaders();
+
 }
 
 //Função chamada uma vez, na inicialização do programa. Correspondente ao onCreate().
@@ -21,105 +23,40 @@ void OpenGLWidget::initializeGL()
    initializeOpenGLFunctions();
 
    //Inicializa a cor de fundo do widget do openGL. A estrutura segue o formato float (red, green, blue, alpha).
-   glClearColor(0,0,0,1);
+   glClearColor(0,0.8,0.9,1);
 
    createShaders();
-
-   m_randomEngine.seed(std::chrono::steady_clock::now().time_since_epoch().count());
-
-   restart();
-}
-
-void OpenGLWidget::restart()
-{
-    m_gameData.m_state = State::Playing; //Sinaliza que o jogo está rodando.
-
-    m_player.create(m_objectsProgram);
+   //createVBOs();
 }
 
 void OpenGLWidget::resizeGL(int w, int h)
 {
 }
 
-//Responsável pela atualização da posição dos objetos.
-void OpenGLWidget::update()
-{
-    //auto const deltaTime{static_cast<float>(getDeltaTime())};
-    
-}
-
 void OpenGLWidget::paintGL()
 {
-    update();
 
     glClear(GL_COLOR_BUFFER_BIT);
 
-    m_player.paint(m_gameData);
-
     //Sinaliza a possibilidade do uso dos shaders.
-    glUseProgram(m_objectsProgram);
-   // glBindVertexArray(m_VAO);
+    glUseProgram(shaderProgram);
 
-    //drawHouseBase();
-    //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    drawHouseBase();
+    glBindVertexArray(vaoHB);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    //drawHouseRoof();
-    //glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+    drawHouseRoof();
+    glBindVertexArray(vaoHF);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
-    //drawHouseWindow();
-    //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    drawHouseWindow();
+    glBindVertexArray(vaoHW);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     //glDrawArrays(GL_TRIANGLE_FAN, 0, steps);
 
-    //Boa prática de programação desativá-los logo após o seu uso.
-    glBindVertexArray(0);
-    glUseProgram(0);
-}
 
-void OpenGLWidget::keyPressEvent(QKeyEvent *event)
-{
-    switch(event->key())
-    {
-        case Qt::Key_Escape:
-            QApplication::quit();
-            break;
-        case (Qt::Key_W):
-            m_gameData.m_input.set(static_cast<std::size_t>(Input::Up));
-            break;
-        case(Qt::Key_S):
-            m_gameData.m_input.set(static_cast<std::size_t>(Input::Down));
-            break;
-        case(Qt::Key_Space):
-            m_gameData.m_input.set(static_cast<std::size_t>(Input::Fire));
-            break;
-        case (Qt::Key_E):
-            m_gameData.m_input.set(static_cast<std::size_t>(Input::Shield));
-            break;
-    }
 }
-
-void OpenGLWidget::keyReleaseEvent(QKeyEvent *event)
-{
-    switch(event->key())
-    {
-        case Qt::Key_Escape:
-            QApplication::quit();
-            break;
-        case (Qt::Key_W):
-            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Up));
-            break;
-        case(Qt::Key_S):
-            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Down));
-            break;
-        case(Qt::Key_Space):
-            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Fire));
-            break;
-        case (Qt::Key_E):
-            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Shield));
-            break;
-    }
-}
-
 
 //Criação dos shaders, usando os resources vertex shaders e fragment shaders.
 void OpenGLWidget::createShaders()
@@ -128,8 +65,8 @@ void OpenGLWidget::createShaders()
     destroyShaders();
 
     //Lê vertex shader e fragment shaders.
-    QFile vs(":/shaders/objects.vert");
-    QFile fs(":/shaders/objects.frag");
+    QFile vs(":/shaders/vshader1.glsl");
+    QFile fs(":/shaders/fshader1.glsl");
 
     //Apresenta errors caso os arquivos não sejam encontrados.
     if(!vs.open(QFile::ReadOnly | QFile::Text)) return;
@@ -185,30 +122,30 @@ void OpenGLWidget::createShaders()
     }
 
     //Cria shader program, inteiro que identifica o programa de shader composto pelo par de vertex/fragment shader.
-    m_objectsProgram = glCreateProgram();
-    glAttachShader(m_objectsProgram, vertexShader);
-    glAttachShader(m_objectsProgram, fragmentShader);
-    glLinkProgram(m_objectsProgram);
+    shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
 
     GLint isLinked{0};
-    glGetProgramiv(m_objectsProgram,GL_LINK_STATUS, &isLinked);
+    glGetProgramiv(shaderProgram,GL_LINK_STATUS, &isLinked);
 
     if(isLinked == GL_FALSE)
     {
         GLint maxLength{0};
-        glGetProgramiv(m_objectsProgram,GL_INFO_LOG_LENGTH,&maxLength);
+        glGetProgramiv(shaderProgram,GL_INFO_LOG_LENGTH,&maxLength);
         std::vector<GLchar> infoLog(maxLength);
-        glGetProgramInfoLog(m_objectsProgram,maxLength,&maxLength, &infoLog[0]);
+        glGetProgramInfoLog(shaderProgram,maxLength,&maxLength, &infoLog[0]);
         qDebug("%s",&infoLog[0]);
-        glDeleteProgram(m_objectsProgram);
+        glDeleteProgram(shaderProgram);
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
         return;
     }
 
 
-    glDetachShader(m_objectsProgram,vertexShader);
-    glDetachShader(m_objectsProgram,fragmentShader);
+    glDetachShader(shaderProgram,vertexShader);
+    glDetachShader(shaderProgram,fragmentShader);
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
@@ -218,7 +155,7 @@ void OpenGLWidget::createShaders()
 void OpenGLWidget::destroyShaders()
 {
     makeCurrent();
-    glDeleteProgram(m_objectsProgram);
+    glDeleteProgram(shaderProgram);
 }
 
 //Cria VBOs
@@ -243,16 +180,16 @@ void OpenGLWidget::createVBOs(GLuint &theVAO, GLuint &theVBO, GLuint &theColors,
     glEnableVertexAttribArray(0);
 
     //Gera VBO de cores
-    glGenBuffers(1, &theColors);
-    glBindBuffer(GL_ARRAY_BUFFER, theColors);
-    glBufferData(GL_ARRAY_BUFFER, colors.size()*sizeof(QVector4D), colors.data(), GL_STATIC_DRAW);
+    glGenBuffers (1, &theColors);
+    glBindBuffer (GL_ARRAY_BUFFER, theColors);
+    glBufferData (GL_ARRAY_BUFFER, colors.size()*sizeof(QVector4D), colors.data(), GL_STATIC_DRAW);
 
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glEnableVertexAttribArray(1);
+    glVertexAttribPointer (1, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray (1);
 
-    glGenBuffers(1, &theEBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size()*sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+    glGenBuffers (1, &theEBO);
+    glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, theEBO);
+    glBufferData (GL_ELEMENT_ARRAY_BUFFER, indices.size()*sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 }
 
 //Destrói VBOs
@@ -264,19 +201,22 @@ void OpenGLWidget::destroyVBOs()
     glDeleteBuffers(1, &vboHB);
     glDeleteBuffers(1, &vboColorHB);
     glDeleteBuffers(1, &eboHB);
+    //Deleta vértices.
+    glDeleteVertexArrays(1, &vaoHB);
 
     //Deleta buffers.
     glDeleteBuffers(1, &vboHF);
     glDeleteBuffers(1, &vboColorHF);
     glDeleteBuffers(1, &eboHF);
+    //Deleta vértices.
+    glDeleteVertexArrays(1, &vaoHF);
 
     //Deleta buffers.
     glDeleteBuffers(1, &vboHW);
     glDeleteBuffers(1, &vboColorHW);
     glDeleteBuffers(1, &eboHW);
-
     //Deleta vértices.
-    glDeleteVertexArrays(1, &m_VAO);
+    glDeleteVertexArrays(1, &vaoHW);
 }
 
 //Altera alguns elementos da cena, como céu sol/lua e a janela da casa.
@@ -297,6 +237,16 @@ void OpenGLWidget::toggleDarkMode(bool changeToDarkMode)
         glClearColor(0,0.8,0.9,1);
     }
     update();
+}
+
+void OpenGLWidget::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key())
+    {
+        case Qt::Key_Escape:
+            QApplication::quit();
+            break;
+    }
 }
 
 //Desenha a base da casa.
@@ -324,7 +274,7 @@ void OpenGLWidget::drawHouseBase()
     indices[0] = 0; indices[1] = 1; indices[2] = 2;
     indices[3] = 2; indices[4] = 3; indices[5] = 0;
 
-    createVBOs(m_VAO, vboHB, vboColorHB, eboHB);
+    createVBOs(vaoHB, vboHB, vboColorHB, eboHB);
 
 }
 
@@ -350,7 +300,7 @@ void OpenGLWidget::drawHouseRoof()
     //Gera a topologia do retângulo.
     indices[0] = 0; indices[1] = 1; indices[2] = 2;
 
-    createVBOs(m_VAO, vboHF, vboColorHF, eboHF);
+    createVBOs(vaoHF, vboHF, vboColorHF, eboHF);
 
 }
 
@@ -379,7 +329,7 @@ void OpenGLWidget::drawSunMoon()
     indices[0] = 0; indices[1] = 1; indices[2] = 2;
     indices[3] = 2; indices[4] = 3; indices[5] = 0;
 
-    createVBOs(m_VAO, vboVertices2, vboColors2, eboIndices2);
+    createVBOs(vao2, vboVertices2, vboColors2, eboIndices2);
 }
 
 void OpenGLWidget::drawHouseWindow()
@@ -415,6 +365,6 @@ void OpenGLWidget::drawHouseWindow()
     indices[0] = 0; indices[1] = 1; indices[2] = 2;
     indices[3] = 2; indices[4] = 3; indices[5] = 0;
 
-    createVBOs(m_VAO, vboHW, vboColorHW, eboHW);
+    createVBOs(vaoHW, vboHW, vboColorHW, eboHW);
 
 }

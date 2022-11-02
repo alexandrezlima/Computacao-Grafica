@@ -36,7 +36,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -72,10 +72,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\bullets.cpp"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\bullets.cpp"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/bullets.cpp"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/bullets.cpp"
 },
 {
     "arguments": [
@@ -114,7 +114,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -150,10 +150,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\enemy.cpp"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\enemy.cpp"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/enemy.cpp"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/enemy.cpp"
 },
 {
     "arguments": [
@@ -192,7 +192,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -228,10 +228,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\gamedata.cpp"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\gamedata.cpp"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/gamedata.cpp"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/gamedata.cpp"
 },
 {
     "arguments": [
@@ -270,7 +270,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -306,10 +306,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\main.cpp"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\main.cpp"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/main.cpp"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/main.cpp"
 },
 {
     "arguments": [
@@ -348,7 +348,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -384,10 +384,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\mainwindow.cpp"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\mainwindow.cpp"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/mainwindow.cpp"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/mainwindow.cpp"
 },
 {
     "arguments": [
@@ -426,7 +426,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -462,10 +462,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\openglwidget.cpp"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\openglwidget.cpp"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/openglwidget.cpp"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/openglwidget.cpp"
 },
 {
     "arguments": [
@@ -504,7 +504,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -540,10 +540,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\player.cpp"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\player.cpp"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/player.cpp"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/player.cpp"
 },
 {
     "arguments": [
@@ -582,7 +582,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -618,10 +618,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\power.cpp"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\power.cpp"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/power.cpp"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/power.cpp"
 },
 {
     "arguments": [
@@ -660,7 +660,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -696,10 +696,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\starlayers.cpp"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\starlayers.cpp"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/starlayers.cpp"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/starlayers.cpp"
 },
 {
     "arguments": [
@@ -738,7 +738,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -774,10 +774,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++-header",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\bullets.h"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\bullets.h"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/bullets.h"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/bullets.h"
 },
 {
     "arguments": [
@@ -816,7 +816,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -852,10 +852,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++-header",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\enemy.h"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\enemy.h"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/enemy.h"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/enemy.h"
 },
 {
     "arguments": [
@@ -894,7 +894,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -930,10 +930,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++-header",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\gamedata.h"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\gamedata.h"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/gamedata.h"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/gamedata.h"
 },
 {
     "arguments": [
@@ -972,7 +972,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -1008,10 +1008,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++-header",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\mainwindow.h"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\mainwindow.h"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/mainwindow.h"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/mainwindow.h"
 },
 {
     "arguments": [
@@ -1050,7 +1050,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -1086,10 +1086,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++-header",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\openglwidget.h"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\openglwidget.h"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/openglwidget.h"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/openglwidget.h"
 },
 {
     "arguments": [
@@ -1128,7 +1128,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -1164,10 +1164,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++-header",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\player.h"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\player.h"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/player.h"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/player.h"
 },
 {
     "arguments": [
@@ -1206,7 +1206,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -1242,10 +1242,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++-header",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\power.h"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\power.h"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/power.h"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/power.h"
 },
 {
     "arguments": [
@@ -1284,7 +1284,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
@@ -1320,10 +1320,10 @@
         "-ferror-limit=1000",
         "-x",
         "c++-header",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado\\starlayers.h"
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter\\starlayers.h"
     ],
     "directory": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/build-desenha_quadrado-Desktop_Qt_6_3_2_MinGW_64_bit-Debug/.qtc_clangd",
-    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/desenha_quadrado/starlayers.h"
+    "file": "C:/Users/Alexandre/Downloads/UFABC 2022.3/Computação Gráfica/Atividade03/Hit-Shooter/starlayers.h"
 },
 {
     "arguments": [
@@ -1362,7 +1362,7 @@
         "-I",
         "E:\\Programas\\Qt\\Tools\\QtCreator\\share\\qtcreator\\cplusplus\\wrappedQtHeaders\\QtCore",
         "-I",
-        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\desenha_quadrado",
+        "C:\\Users\\Alexandre\\Downloads\\UFABC 2022.3\\Computação Gráfica\\Atividade03\\Hit-Shooter",
         "-I",
         "E:\\Programas\\Qt\\6.3.2\\mingw_64\\include",
         "-I",
