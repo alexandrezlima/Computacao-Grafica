@@ -53,9 +53,14 @@ private:
     Player m_player;
     Enemy m_enemy;
 
+    bool showingEndGame{false};
+
     std::default_random_engine m_randomEngine;
     float deltaTime{0};
 
+signals:
+    void updateEndGameLabel(QString);
+    void updateEndGameVisibility(bool);
 
 public slots:
     void animate();

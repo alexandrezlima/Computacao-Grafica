@@ -11,9 +11,10 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QFrame>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenuBar>
-#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "openglwidget.h"
@@ -25,36 +26,104 @@ class Ui_MainWindow
 public:
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
+    QFrame *frame;
+    QStackedWidget *stackedWidget;
+    QWidget *page;
     OpenGLWidget *openGLWidget;
-    QMenuBar *menubar;
-    QStatusBar *statusbar;
+    QLabel *lblEndGame;
+    QLabel *lblHitsAndFrames;
+    QWidget *page_2;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(940, 526);
-        MainWindow->setAutoFillBackground(true);
+        MainWindow->setWindowModality(Qt::NonModal);
+        MainWindow->resize(962, 680);
+#if QT_CONFIG(statustip)
+        MainWindow->setStatusTip(QString::fromUtf8(""));
+#endif // QT_CONFIG(statustip)
+#if QT_CONFIG(whatsthis)
+        MainWindow->setWhatsThis(QString::fromUtf8(""));
+#endif // QT_CONFIG(whatsthis)
+        MainWindow->setAutoFillBackground(false);
+        MainWindow->setDockOptions(QMainWindow::AnimatedDocks);
+        MainWindow->setUnifiedTitleAndToolBarOnMac(false);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+        centralwidget->setAutoFillBackground(true);
         verticalLayout = new QVBoxLayout(centralwidget);
+        verticalLayout->setSpacing(0);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        openGLWidget = new OpenGLWidget(centralwidget);
+        verticalLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
+        frame = new QFrame(centralwidget);
+        frame->setObjectName(QString::fromUtf8("frame"));
+        frame->setAutoFillBackground(true);
+        frame->setFrameShape(QFrame::StyledPanel);
+        frame->setFrameShadow(QFrame::Raised);
+        frame->setLineWidth(1);
+        stackedWidget = new QStackedWidget(frame);
+        stackedWidget->setObjectName(QString::fromUtf8("stackedWidget"));
+        stackedWidget->setGeometry(QRect(0, 0, 961, 681));
+        page = new QWidget();
+        page->setObjectName(QString::fromUtf8("page"));
+        openGLWidget = new OpenGLWidget(page);
         openGLWidget->setObjectName(QString::fromUtf8("openGLWidget"));
+        openGLWidget->setEnabled(true);
+        openGLWidget->setGeometry(QRect(0, 0, 961, 681));
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(openGLWidget->sizePolicy().hasHeightForWidth());
+        openGLWidget->setSizePolicy(sizePolicy);
         openGLWidget->setFocusPolicy(Qt::StrongFocus);
+        openGLWidget->setAutoFillBackground(true);
+        lblEndGame = new QLabel(page);
+        lblEndGame->setObjectName(QString::fromUtf8("lblEndGame"));
+        lblEndGame->setGeometry(QRect(180, 140, 601, 151));
+        QFont font;
+        font.setPointSize(50);
+        lblEndGame->setFont(font);
+        lblEndGame->setAcceptDrops(false);
+        lblEndGame->setAutoFillBackground(false);
+        lblEndGame->setStyleSheet(QString::fromUtf8("background-color: rgb(46, 47, 48);\n"
+"border-color: rgb(255, 255, 255);\n"
+"color: rgb(255, 255, 255);"));
+        lblEndGame->setFrameShape(QFrame::StyledPanel);
+        lblEndGame->setAlignment(Qt::AlignCenter);
+        lblEndGame->setWordWrap(false);
+        lblEndGame->setIndent(0);
+        lblHitsAndFrames = new QLabel(page);
+        lblHitsAndFrames->setObjectName(QString::fromUtf8("lblHitsAndFrames"));
+        lblHitsAndFrames->setGeometry(QRect(10, 10, 101, 71));
+        QFont font1;
+        font1.setPointSize(12);
+        lblHitsAndFrames->setFont(font1);
+        lblHitsAndFrames->setAcceptDrops(false);
+        lblHitsAndFrames->setAutoFillBackground(false);
+        lblHitsAndFrames->setStyleSheet(QString::fromUtf8("background-color: rgb(46, 47, 48);\n"
+"border-color: rgb(255, 255, 255);\n"
+"color: rgb(255, 255, 255);"));
+        lblHitsAndFrames->setFrameShape(QFrame::Panel);
+        lblHitsAndFrames->setFrameShadow(QFrame::Plain);
+        lblHitsAndFrames->setScaledContents(false);
+        lblHitsAndFrames->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
+        lblHitsAndFrames->setWordWrap(false);
+        lblHitsAndFrames->setMargin(10);
+        lblHitsAndFrames->setIndent(0);
+        stackedWidget->addWidget(page);
+        page_2 = new QWidget();
+        page_2->setObjectName(QString::fromUtf8("page_2"));
+        stackedWidget->addWidget(page_2);
 
-        verticalLayout->addWidget(openGLWidget);
+        verticalLayout->addWidget(frame);
 
         MainWindow->setCentralWidget(centralwidget);
-        menubar = new QMenuBar(MainWindow);
-        menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 940, 21));
-        MainWindow->setMenuBar(menubar);
-        statusbar = new QStatusBar(MainWindow);
-        statusbar->setObjectName(QString::fromUtf8("statusbar"));
-        MainWindow->setStatusBar(statusbar);
 
         retranslateUi(MainWindow);
+        QObject::connect(openGLWidget, SIGNAL(updateEndGameLabel(QString)), lblEndGame, SLOT(setText(QString)));
+        QObject::connect(openGLWidget, SIGNAL(updateEndGameVisibility(bool)), lblEndGame, SLOT(setVisible(bool)));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -62,6 +131,8 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "Hit Shooter - Computa\303\247\303\243o Gr\303\241fica - Atividade 04", nullptr));
+        lblEndGame->setText(QCoreApplication::translate("MainWindow", "YOU DIED!", nullptr));
+        lblHitsAndFrames->setText(QCoreApplication::translate("MainWindow", "<html><head/><body><p>FPS: x ms<br/>Hits: y</p></body></html>", nullptr));
     } // retranslateUi
 
 };

@@ -22,6 +22,8 @@ void OpenGLWidget::initializeGL()
    //Inicializa a cor de fundo do widget do openGL. A estrutura segue o formato float (red, green, blue, alpha).
    glClearColor(0,0,0,1);
 
+   emit updateEndGameVisibility(false);
+
    connect(&timer, &QTimer::timeout, this, &OpenGLWidget::animate);
    timer.start(0);
    elapsedTimer.start();
@@ -39,6 +41,8 @@ void OpenGLWidget::restart()
     m_gameData.m_state = State::Playing; //Sinaliza que o jogo está rodando.
 
     m_player.create(m_objectsProgram); //Cria o player.
+
+    showingEndGame = false;
 }
 
 void OpenGLWidget::resizeGL(int w, int h)
@@ -58,6 +62,7 @@ void OpenGLWidget::paintGL()
 
     glBindVertexArray(0);
     glUseProgram(0);
+
 }
 
 //Atualiza texto do jogo (se jogador perdeu ou ganhou, mostra mensagem; ou não mostra mensagem).
@@ -66,15 +71,32 @@ void OpenGLWidget::updateGame()
     switch (m_gameData.m_state)
     {
         case (State::GameOver):
-            //Altera texto para lose.
+            //para emitir o signal: emit updateHitsLabel(QString("Hits #1").arg(numHits));
+            if (!showingEndGame)
+            {
+                showingEndGame = true;
+                emit updateEndGameLabel(QString("YOU LOSE!"));
+                emit updateEndGameVisibility(true);
+            }
             //Mostra o texto na tela
             break;
         case (State::Win):
+        if (!showingEndGame)
+            {
+                showingEndGame = true;
+                emit updateEndGameLabel(QString("YOU WIN!"));
+                emit updateEndGameVisibility(true);
+            }
             //Altera o texto para win.
             //Mostra o texto na tela.
             break;
         case (State::Playing):
-            //remove o texto da tela.
+            if (showingEndGame)
+            {
+                showingEndGame = false;
+                emit updateEndGameLabel(QString("PLAYING..."));
+                emit updateEndGameVisibility(false);
+            }
             break;
     }
 
@@ -107,6 +129,15 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *event)
         case (Qt::Key_E):
             m_gameData.m_input.set(static_cast<std::size_t>(Input::Shield));
             break;
+    case (Qt::Key_K):
+        m_gameData.m_state = State::Win;
+        break;
+    case (Qt::Key_L):
+        m_gameData.m_state = State::GameOver;
+        break;
+    case (Qt::Key_J):
+        m_gameData.m_state = State::Playing;
+        break;
     }
 }
 
