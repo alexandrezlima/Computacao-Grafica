@@ -19,16 +19,15 @@ public:
     ~Player();
     void create(GLuint program);
     void paint(GameData const &gameData);
-    void update(GameData const &gameData, float deltaTime);
+    void updateGame(GameData const &gameData, float deltaTime);
     void destroy();
+    std::vector<float> getPosition();
 
 
-    std::array<float, 4> m_Color{1.0f, 1.0f, 1.0f, 1.0f};
     float m_rotation{0};
     float m_scale{1.0f};
-    float m_PosYOffset{0};
-    float m_PosY{0};
-    float m_velocity{0};
+    float m_velocity{2};
+    std::vector<float> m_position{0, -0.8f};
 
     QTimer m_bulletCDTimer;
 

@@ -3,8 +3,6 @@
 #include <QApplication>
 #include <QKeyEvent>
 
-using namespace std;
-
 //Construtor da classe OpenGLWidget.
 OpenGLWidget::OpenGLWidget(QWidget *parent) : QOpenGLWidget(parent)
 {
@@ -24,6 +22,10 @@ void OpenGLWidget::initializeGL()
    //Inicializa a cor de fundo do widget do openGL. A estrutura segue o formato float (red, green, blue, alpha).
    glClearColor(0,0,0,1);
 
+   connect(&timer, &QTimer::timeout, this, &OpenGLWidget::animate);
+   timer.start(0);
+   elapsedTimer.start();
+
    createShaders();
 
    m_randomEngine.seed(std::chrono::steady_clock::now().time_since_epoch().count());
@@ -31,6 +33,7 @@ void OpenGLWidget::initializeGL()
    restart();
 }
 
+//Reseta player e enemy.
 void OpenGLWidget::restart()
 {
     m_gameData.m_state = State::Playing; //Sinaliza que o jogo está rodando.
@@ -42,46 +45,23 @@ void OpenGLWidget::resizeGL(int w, int h)
 {
 }
 
-//Responsável pela atualização da posição dos objetos.
-void OpenGLWidget::update()
-{
-    //auto const deltaTime{static_cast<float>(getDeltaTime())}; //delta time, importante para animações.
-    auto const deltaTime = 1;  //Ajustar o delta time.
 
-    m_player.update(m_gameData, deltaTime);
-}
 
 void OpenGLWidget::paintGL()
 {
-    update();
-    updateGameStatus();
-
     glClear(GL_COLOR_BUFFER_BIT);
 
     //Sinaliza a possibilidade do uso dos shaders.
-    //glUseProgram(m_objectsProgram);
+    glUseProgram(m_objectsProgram);
 
     m_player.paint(m_gameData);
 
-
-    //glBindVertexArray(m_VAO);
-    //drawHouseBase();
-    //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-    //drawHouseRoof();
-    //glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-
-    //drawHouseWindow();
-    //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-    //glDrawArrays(GL_TRIANGLE_FAN, 0, steps);
-
-    //Boa prática de programação desativá-los logo após o seu uso.
     glBindVertexArray(0);
     glUseProgram(0);
 }
 
-void OpenGLWidget::updateGameStatus()
+//Atualiza texto do jogo (se jogador perdeu ou ganhou, mostra mensagem; ou não mostra mensagem).
+void OpenGLWidget::updateGame()
 {
     switch (m_gameData.m_state)
     {
@@ -97,6 +77,8 @@ void OpenGLWidget::updateGameStatus()
             //remove o texto da tela.
             break;
     }
+
+    m_player.updateGame(m_gameData, getDeltaTime());
 }
 
 //Marca quais keys estão em uso.
@@ -107,11 +89,17 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *event)
         case (Qt::Key_Escape):
             QApplication::quit();
             break;
-        case (Qt::Key_W):
-            m_gameData.m_input.set(static_cast<std::size_t>(Input::Up));
+        case (Qt::Key_D):
+            m_gameData.m_input.set(static_cast<std::size_t>(Input::Right));
             break;
-        case(Qt::Key_S):
-            m_gameData.m_input.set(static_cast<std::size_t>(Input::Down));
+        case (Qt::Key_Right):
+            m_gameData.m_input.set(static_cast<std::size_t>(Input::Right));
+            break;
+        case(Qt::Key_A):
+            m_gameData.m_input.set(static_cast<std::size_t>(Input::Left));
+            break;
+        case (Qt::Key_Left):
+            m_gameData.m_input.set(static_cast<std::size_t>(Input::Left));
             break;
         case(Qt::Key_Space):
             m_gameData.m_input.set(static_cast<std::size_t>(Input::Fire));
@@ -130,14 +118,20 @@ void OpenGLWidget::keyReleaseEvent(QKeyEvent *event)
         case (Qt::Key_Escape):
             QApplication::quit();
             break;
-        case (Qt::Key_W):
-            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Up));
+        case (Qt::Key_D):
+            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Right));
             break;
-        case(Qt::Key_S):
-            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Down));
+        case (Qt::Key_Right):
+            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Right));
+            break;
+        case(Qt::Key_A):
+            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Left));
+            break;
+        case (Qt::Key_Left):
+            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Left));
             break;
         case(Qt::Key_Space):
-            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Fire));
+                m_gameData.m_input.reset(static_cast<std::size_t>(Input::Fire));
             break;
         case (Qt::Key_E):
             m_gameData.m_input.reset(static_cast<std::size_t>(Input::Shield));
@@ -247,209 +241,18 @@ void OpenGLWidget::destroy()
     m_player.destroy();
 }
 
-//Cria VBOs
-void OpenGLWidget::createVBOs(GLuint &theVAO, GLuint &theVBO, GLuint &theColors, GLuint &theEBO)
+void OpenGLWidget::animate()
 {
-    makeCurrent();
+    deltaTime = elapsedTimer.restart()/1000.0f;
 
-    //Libera os VBOs atuais, caso já tenham sido criados. Importante para não consumir toda memória da GPU.
-    destroyVBOs();
+    updateGame();
 
-    //Cria VAO
-    glGenVertexArrays(1, &theVAO);
-    //Associa atributos vertex ao VAO atual
-    glBindVertexArray(theVAO);
+    //se getEnemyBulletPos in range Player.GetPosition (pegar bounds do player)
 
-    //Gera VBO de posições (vértices)
-    glGenBuffers(1, &theVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, theVBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(QVector4D), vertices.data(), GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glEnableVertexAttribArray(0);
-
-    //Gera VBO de cores
-    glGenBuffers(1, &theColors);
-    glBindBuffer(GL_ARRAY_BUFFER, theColors);
-    glBufferData(GL_ARRAY_BUFFER, colors.size()*sizeof(QVector4D), colors.data(), GL_STATIC_DRAW);
-
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glEnableVertexAttribArray(1);
-
-    glGenBuffers(1, &theEBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, theEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size()*sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+    update();
 }
 
-//Destrói VBOs
-void OpenGLWidget::destroyVBOs()
+float OpenGLWidget::getDeltaTime()
 {
-    makeCurrent ();
-}
-
-
-//Desenha a base da casa.
-void OpenGLWidget::drawHouseBase()
-{
-
-    array vertice{ array{-02.5f, +12.5f, 0.0f, 1.0f}
-                    , array{-15.5f, +02.5f, 0.0f, 1.0f}
-                    , array{-15.5f, -12.5f, 0.0f, 1.0f}
-                    , array{-09.5f, -07.5f, 0.0f, 1.0f}
-                    , array{-03.5f, -12.5f, 0.0f, 1.0f}
-                    , array{+03.5f, -12.5f, 0.0f, 1.0f}
-                    , array{+09.5f, -07.5f, 0.0f, 1.0f}
-                    , array{+15.5f, -12.5f, 0.0f, 1.0f}
-                    , array{+15.5f, +02.5f, 0.0f, 1.0f}
-                    , array{+02.5f, +12.5f, 0.0f, 1.0f}
-
-                      // Cannon (left)
-                    , array{-12.5f, +10.5f, 0.0f, 1.0f}
-                    , array{-12.5f, +04.0f, 0.0f, 1.0f}
-                    , array{-09.5f, +04.0f, 0.0f, 1.0f}
-                    , array{-09.5f, +10.5f, 0.0f, 1.0f}
-
-                      // Cannon (right)
-                    , array{+09.5f, +10.5f, 0.0f, 1.0f}
-                    , array{+09.5f, +04.0f, 0.0f, 1.0f}
-                    , array{+12.5f, +04.0f, 0.0f, 1.0f}
-                    , array{+12.5f, +10.5f, 0.0f, 1.0f}
-
-                      // Thruster trail (left)
-                    , array{-12.0f, -07.5f, 0.0f, 1.0f}
-                    , array{-09.5f, -18.0f, 0.0f, 1.0f}
-                    , array{-07.0f, -07.5f, 0.0f, 1.0f}
-
-                      // Thruster trail (right)
-                    , array{+07.0f, -07.5f, 0.0f, 1.0f}
-                    , array{+09.5f, -18.0f, 0.0f, 1.0f}
-                    , array{+12.0f, -07.5f, 0.0f, 1.0f}
-                   };
-
-    array colored{
-                         array{0.5f,0.5f,0.5f,1.0f}
-                       , array{0.5f,0.5f,0.5f,1.0f}
-                       , array{0.5f,0.5f,0.5f,1.0f}
-                       , array{0.5f,0.5f,0.5f,1.0f}
-                       , array{0.5f,0.5f,0.5f,1.0f}
-
-                 };
-
-    // Normalização para o intervalo [-1,1]
-    for (auto &position : vertice) {
-        position[0] /= 30.5f;
-        position[1] /= 30.5f;
-    }
-
-    array const indice{0, 1, 3,
-                       1, 2, 3,
-                       0, 3, 4,
-                       0, 4, 5,
-                       9, 0, 5,
-                       9, 5, 6,
-                       9, 6, 8,
-                       8, 6, 7,
-                       // Cannons
-                       10, 11, 12,
-                       10, 12, 13,
-                       14, 15, 16,
-                       14, 16, 17,
-                       // Thruster trails
-                       18, 19, 20,
-                       21, 22, 23};
-
-    //createVBOs(m_VAO, vboHB, vboColorHB, eboHB);
-
-    makeCurrent();
-
-    //Libera os VBOs atuais, caso já tenham sido criados. Importante para não consumir toda memória da GPU.
-    destroyVBOs();
-
-    //Cria VAO
-    glGenVertexArrays(1, &m_VAO);
-    //Associa atributos vertex ao VAO atual
-    glBindVertexArray(m_VAO);
-
-    //Gera VBO de posições (vértices)
-    glGenBuffers(1, &vboHB);
-    glBindBuffer(GL_ARRAY_BUFFER, vboHB);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertice), vertice.data(), GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glEnableVertexAttribArray(0);
-
-    //Gera VBO de cores
-    glGenBuffers(1, &vboColorHB);
-    glBindBuffer(GL_ARRAY_BUFFER, vboColorHB);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(colored), colored.data(), GL_STATIC_DRAW);
-
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glEnableVertexAttribArray(1);
-
-    glGenBuffers(1, &eboHB);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboHB);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indice), indice.data(), GL_STATIC_DRAW);
-}
-
-//Desenha o telhado da casa.
-void OpenGLWidget::drawHouseRoof()
-{
-    //reconfigura o array de vértices, colors e índices.
-    vertices.resize(3);
-    colors.resize(3);
-    indices.resize(3); //1*3 -> um triângulo.
-
-    //Define a posição dos vértices, inserindo-as no array.
-    vertices[0] = QVector4D(-0.9, 0.01, 0, 1);
-    vertices[1] = QVector4D(0, 0.01, 0, 1);
-    vertices[2] = QVector4D(-0.425, 0.5, 0, 1);
-
-
-    //Cria as cores para os vértices.
-    colors[0] = QVector4D(1, 0.5, 0.5, 1);
-    colors[1] = QVector4D(1, 0.5, 0.5, 1);
-    colors[2] = QVector4D(1, 0.5, 0.5, 1);
-
-    //Gera a topologia do retângulo.
-    indices[0] = 0; indices[1] = 1; indices[2] = 2;
-
-    createVBOs(m_VAO, vboHF, vboColorHF, eboHF);
-
-}
-
-void OpenGLWidget::drawHouseWindow()
-{
-    //reconfigura o array de vértices, colors e índices.
-    vertices.resize(4);
-    colors.resize(4);
-    indices.resize(6); //2*3 -> dois triângulos.
-
-    //Define a posição dos vértices, inserindo-as no array.
-    vertices[0] = QVector4D(-0.1, -0.5, 0, 1);
-    vertices[1] = QVector4D(-0.3, -0.5, 0, 1);
-    vertices[2] = QVector4D(-0.3, -0.2, 0, 1);
-    vertices[3] = QVector4D(-0.1, -0.2, 0, 1);
-
-
-    if (isDay) {
-        //Cria as cores para os vértices.
-        colors[0] = QVector4D(1, 1, 1, 1);
-        colors[1] = QVector4D(1, 1, 1, 1);
-        colors[2] = QVector4D(1, 1, 1, 1);
-        colors[3] = QVector4D(1, 1, 1, 1);
-    } else {
-        //Cria as cores para os vértices.
-        colors[0] = QVector4D(1, 1, 0, 1);
-        colors[1] = QVector4D(1, 1, 0, 1);
-        colors[2] = QVector4D(1, 1, 0, 1);
-        colors[3] = QVector4D(1, 1, 0, 1);
-    }
-
-
-    //Gera a topologia do retângulo.
-    indices[0] = 0; indices[1] = 1; indices[2] = 2;
-    indices[3] = 2; indices[4] = 3; indices[5] = 0;
-
-    createVBOs(m_VAO, vboHW, vboColorHW, eboHW);
-
+    return deltaTime;
 }

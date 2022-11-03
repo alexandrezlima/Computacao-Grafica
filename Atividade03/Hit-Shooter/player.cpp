@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <QApplication>
 #include <QVector4D>
+#include <iostream>
 
 using namespace std;
 
@@ -22,21 +23,20 @@ void Player::create(GLuint program)
     m_translationLoc = glGetUniformLocation(m_program, "translation");
 
     m_rotation = 0.0f;
-    m_velocity = 0.0f;
-    m_scale = 0.125f;
-    m_PosYOffset = 0;
-    m_PosY = 0;
+    m_velocity = 2.0f;
+    m_scale = 0.250f;
+    m_position[0] = 0.0f;
 
     array vertices{
                     // Ship body
-                      array{0.0f, -00.9f, 0.0f, 1.0f}
-                    , array{-0.9f, -0.9f, 0.0f, 1.0f}
-                    , array{-0.9f, 0.0f, 0.0f, 1.0f}
-                    , array{-0.0f, 0.0f, 0.0f, 1.0f}
+                      array{1.0f, -1.0f, 0.0f, 1.0f}
+                    , array{-1.0f, -1.0f, 0.0f, 1.0f}
+                    , array{-1.0f, 1.0f, 0.0f, 1.0f}
+                    , array{1.0f, 1.0f, 0.0f, 1.0f}
                    };
 
     array colors{
-                         array{0.5f,0.5f,0.5f,1.0f}
+                         array{0.6f,0.5f,0.5f,1.0f}
                        , array{0.5f,0.5f,0.5f,1.0f}
                        , array{0.5f,0.5f,0.5f,1.0f}
                        , array{0.5f,0.5f,0.5f,1.0f}
@@ -115,9 +115,9 @@ void Player::paint(GameData const &gameData)
     glBindVertexArray(m_VAO);
 
     //Binding para as variáveis uniformes.
-    glUniform4f(m_translationLoc, 0, 0, 0, 1);
-    glUniform1f(m_scaleLoc, 10.0f);
-    glUniform1f(m_rotationLoc, 0.0f);
+    glUniform4f(m_translationLoc,  m_position[0], m_position[1], 0, 1);
+    glUniform1f(m_scaleLoc, m_scale);
+    glUniform1f(m_rotationLoc, m_rotation);
 
 
     glDrawElements(GL_TRIANGLES, 2 * 3, GL_UNSIGNED_INT, nullptr);
@@ -129,7 +129,29 @@ void Player::paint(GameData const &gameData)
 
 }
 
-void Player::update(GameData const &gameData, float deltaTime)
+void Player::updateGame(GameData const &gameData, float deltaTime)
 {
+    int keyUp{1};
 
+    if (gameData.m_input[static_cast<size_t>(Input::Right)])
+    {
+        m_position[0] += m_velocity * deltaTime;
+        keyUp = 1;
+    }
+
+    if (gameData.m_input[static_cast<size_t>(Input::Left)])
+    {
+        m_position[0] -= m_velocity * deltaTime;
+        keyUp = -1;
+    }
+
+    if (abs(m_position[0]) > 0.9f )
+        m_position[0] = 0.9f * keyUp;
+
+    update();
+}
+
+std::vector<float> Player::getPosition()
+{
+    return m_position;
 }

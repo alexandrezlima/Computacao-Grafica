@@ -9,7 +9,7 @@ Definição dos possíveis inputs in game:
     -Fire atira;
     -Shield levanta uma barreira protetora para impedir o dano de projéteis inimigos.
 */
-enum class Input {Up, Down, Fire, Shield};
+enum class Input {Right, Left, Fire, Shield};
 enum class State {Playing, GameOver, Win};
 
 
