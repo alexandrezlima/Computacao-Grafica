@@ -61,6 +61,7 @@ private:
 signals:
     void updateEndGameLabel(QString);
     void updateEndGameVisibility(bool);
+    void updateFPSHit(QString);
 
 public slots:
     void animate();

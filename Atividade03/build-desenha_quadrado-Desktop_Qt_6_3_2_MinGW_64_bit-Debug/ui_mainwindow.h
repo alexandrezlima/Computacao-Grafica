@@ -96,7 +96,7 @@ public:
         lblEndGame->setIndent(0);
         lblHitsAndFrames = new QLabel(page);
         lblHitsAndFrames->setObjectName(QString::fromUtf8("lblHitsAndFrames"));
-        lblHitsAndFrames->setGeometry(QRect(10, 10, 101, 71));
+        lblHitsAndFrames->setGeometry(QRect(10, 10, 211, 71));
         QFont font1;
         font1.setPointSize(12);
         lblHitsAndFrames->setFont(font1);
@@ -124,6 +124,7 @@ public:
         retranslateUi(MainWindow);
         QObject::connect(openGLWidget, SIGNAL(updateEndGameLabel(QString)), lblEndGame, SLOT(setText(QString)));
         QObject::connect(openGLWidget, SIGNAL(updateEndGameVisibility(bool)), lblEndGame, SLOT(setVisible(bool)));
+        QObject::connect(openGLWidget, SIGNAL(updateFPSHit(QString)), lblHitsAndFrames, SLOT(setText(QString)));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi

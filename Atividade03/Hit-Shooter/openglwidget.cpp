@@ -71,7 +71,6 @@ void OpenGLWidget::updateGame()
     switch (m_gameData.m_state)
     {
         case (State::GameOver):
-            //para emitir o signal: emit updateHitsLabel(QString("Hits #1").arg(numHits));
             if (!showingEndGame)
             {
                 showingEndGame = true;
@@ -279,6 +278,7 @@ void OpenGLWidget::animate()
     updateGame();
 
     //se getEnemyBulletPos in range Player.GetPosition (pegar bounds do player)
+    emit updateFPSHit(QString("<html><head/><body><p>FPS: %1 ms<br/>Hits: l</p></body></html>").arg(getDeltaTime()*1000));
 
     update();
 }

@@ -149,7 +149,7 @@ color: rgb(255, 255, 255);</string>
           <rect>
            <x>10</x>
            <y>10</y>
-           <width>101</width>
+           <width>211</width>
            <height>71</height>
           </rect>
          </property>
@@ -210,6 +210,7 @@ color: rgb(255, 255, 255);</string>
    <slots>
     <signal>updateEndGameLabel(QString)</signal>
     <signal>updateEndGameVisibility(bool)</signal>
+    <signal>updateFPSHit(QString)</signal>
    </slots>
   </customwidget>
  </customwidgets>
@@ -247,6 +248,22 @@ color: rgb(255, 255, 255);</string>
     <hint type="destinationlabel">
      <x>480</x>
      <y>215</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>openGLWidget</sender>
+   <signal>updateFPSHit(QString)</signal>
+   <receiver>lblHitsAndFrames</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>480</x>
+     <y>340</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>60</x>
+     <y>45</y>
     </hint>
    </hints>
   </connection>

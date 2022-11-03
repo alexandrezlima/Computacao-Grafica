@@ -149,6 +149,7 @@ void Player::updateGame(GameData const &gameData, float deltaTime)
         m_position[0] = 0.9f * keyUp;
 
     update();
+    cout << deltaTime;
 }
 
 std::vector<float> Player::getPosition()
