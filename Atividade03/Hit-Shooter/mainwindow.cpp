@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
-    this->setFixedSize(QSize(960, 680));
+    this->setFixedSize(QSize(960, 860));
 }
 
 MainWindow::~MainWindow()

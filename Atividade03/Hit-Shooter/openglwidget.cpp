@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <QApplication>
 #include <QKeyEvent>
+#include <qDebug>
+#include <stdio.h>
+#include <iostream>
 
 //Construtor da classe OpenGLWidget.
 OpenGLWidget::OpenGLWidget(QWidget *parent) : QOpenGLWidget(parent)
@@ -22,11 +25,14 @@ void OpenGLWidget::initializeGL()
    //Inicializa a cor de fundo do widget do openGL. A estrutura segue o formato float (red, green, blue, alpha).
    glClearColor(0,0,0,1);
 
-   emit updateEndGameVisibility(false);
+
 
    connect(&timer, &QTimer::timeout, this, &OpenGLWidget::animate);
    timer.start(0);
+
    elapsedTimer.start();
+   fpsElapsedTimer.start();
+   hitDamageElapsedTimer.start();
 
    createShaders();
 
@@ -40,7 +46,12 @@ void OpenGLWidget::restart()
 {
     m_gameData.m_state = State::Playing; //Sinaliza que o jogo está rodando.
 
+    emit updateEndGameVisibility(false);
+    emit updateRestartButton(false);
+
     m_player.create(m_objectsProgram); //Cria o player.
+
+    m_enemy.create(m_objectsProgram); //Cria o inimigo.
 
     showingEndGame = false;
 }
@@ -60,9 +71,11 @@ void OpenGLWidget::paintGL()
 
     m_player.paint(m_gameData);
 
+    m_enemy.paint(m_gameData);
+
+
     glBindVertexArray(0);
     glUseProgram(0);
-
 }
 
 //Atualiza texto do jogo (se jogador perdeu ou ganhou, mostra mensagem; ou não mostra mensagem).
@@ -76,6 +89,7 @@ void OpenGLWidget::updateGame()
                 showingEndGame = true;
                 emit updateEndGameLabel(QString("YOU LOSE!"));
                 emit updateEndGameVisibility(true);
+                updateRestartButton(true);
             }
             //Mostra o texto na tela
             break;
@@ -85,6 +99,7 @@ void OpenGLWidget::updateGame()
                 showingEndGame = true;
                 emit updateEndGameLabel(QString("YOU WIN!"));
                 emit updateEndGameVisibility(true);
+                updateRestartButton(true);
             }
             //Altera o texto para win.
             //Mostra o texto na tela.
@@ -95,11 +110,73 @@ void OpenGLWidget::updateGame()
                 showingEndGame = false;
                 emit updateEndGameLabel(QString("PLAYING..."));
                 emit updateEndGameVisibility(false);
+                updateRestartButton(false);
             }
             break;
     }
 
     m_player.updateGame(m_gameData, getDeltaTime());
+
+    m_enemy.updateGame(m_gameData, getDeltaTime());
+
+
+    if (m_gameData.m_state == State::Playing) {
+        checkCollisions();
+        checkWinCondition();
+    }
+}
+
+void OpenGLWidget::checkCollisions()
+{
+    if (hitDamageElapsedTimer.elapsed() > 100)
+        updateBackground(0);
+
+    //Verificação dos tiros do player.
+    if (m_player.getIsShooting())
+    {
+        //Analisa inicialmente a altura do tiro e do inimigo. Verifica se estão próximos.
+        float distY = abs(m_player.getBulletPosition()[1]-m_enemy.getPosition()[1]);
+        if (distY < 0.125f)
+        {
+            //Em caso positivo, verifica a distância horizontal.
+            float distX = abs(m_player.getBulletPosition()[0]-m_enemy.getPosition()[0]);
+            if (distX < 0.125f)
+            {
+                //Caso a distância seja próxima o suficiente, adiciona o hit ao contador e sinaliza a interrupção do render do tiro.
+                m_player.addHit();
+                m_player.stopShooting();
+                updateBackground(1);
+            }
+        }
+    }
+
+    if (m_enemy.getIsShooting())
+    {
+        //Analisa inicialmente a altura do tiro e do inimigo. Verifica se estão próximos.
+        float distY = abs(m_enemy.getBulletPosition()[1]-m_player.getPosition()[1]);
+        if (distY < 0.125f)
+        {
+            //Em caso positivo, verifica a distância horizontal.
+            float distX = abs(m_enemy.getBulletPosition()[0]-m_player.getPosition()[0]);
+            if (distX < 0.125f)
+            {
+                //Caso a distância seja próxima o suficiente, adiciona o hit ao contador e sinaliza a interrupção do render do tiro.
+                m_enemy.addHit();
+                m_enemy.stopShooting();
+                updateBackground(2);
+            }
+        }
+    }
+
+}
+
+void OpenGLWidget::checkWinCondition()
+{
+    if (m_player.getTotalHits() >= 10)
+        m_gameData.m_state = State::Win;
+
+    if (m_enemy.getTotalHits() >= 10)
+        m_gameData.m_state = State::GameOver;
 }
 
 //Marca quais keys estão em uso.
@@ -122,25 +199,28 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *event)
         case (Qt::Key_Left):
             m_gameData.m_input.set(static_cast<std::size_t>(Input::Left));
             break;
+        case (Qt::Key_S):
+            m_gameData.m_input.set(static_cast<std::size_t>(Input::Down));
+            break;
+        case (Qt::Key_Down):
+            m_gameData.m_input.set(static_cast<std::size_t>(Input::Down));
+            break;
+        case(Qt::Key_W):
+            m_gameData.m_input.set(static_cast<std::size_t>(Input::Up));
+            break;
+        case (Qt::Key_Up):
+            m_gameData.m_input.set(static_cast<std::size_t>(Input::Up));
+            break;
         case(Qt::Key_Space):
             m_gameData.m_input.set(static_cast<std::size_t>(Input::Fire));
             break;
         case (Qt::Key_E):
             m_gameData.m_input.set(static_cast<std::size_t>(Input::Shield));
             break;
-    case (Qt::Key_K):
-        m_gameData.m_state = State::Win;
-        break;
-    case (Qt::Key_L):
-        m_gameData.m_state = State::GameOver;
-        break;
-    case (Qt::Key_J):
-        m_gameData.m_state = State::Playing;
-        break;
     }
 }
 
-//Desmarca as keys soltas.
+//Desmarca as keys que deixaram de ser usadas.
 void OpenGLWidget::keyReleaseEvent(QKeyEvent *event)
 {
     switch(event->key())
@@ -160,9 +240,21 @@ void OpenGLWidget::keyReleaseEvent(QKeyEvent *event)
         case (Qt::Key_Left):
             m_gameData.m_input.reset(static_cast<std::size_t>(Input::Left));
             break;
-        case(Qt::Key_Space):
-                m_gameData.m_input.reset(static_cast<std::size_t>(Input::Fire));
+        case (Qt::Key_S):
+            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Down));
             break;
+        case (Qt::Key_Down):
+            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Down));
+            break;
+        case(Qt::Key_W):
+            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Up));
+            break;
+        case (Qt::Key_Up):
+            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Up));
+            break;
+        case(Qt::Key_Space):
+            m_gameData.m_input.reset(static_cast<std::size_t>(Input::Fire));
+        break;
         case (Qt::Key_E):
             m_gameData.m_input.reset(static_cast<std::size_t>(Input::Shield));
             break;
@@ -269,16 +361,25 @@ void OpenGLWidget::destroy()
     glDeleteProgram(m_objectsProgram);
 
     m_player.destroy();
+    m_enemy.destroy();
 }
 
 void OpenGLWidget::animate()
 {
+    //se getEnemyBulletPos in range Player.GetPosition (pegar bounds do player)
+
+
+    if(++frameCount==100)
+    {
+        QString str = QString("<html><head/><body><p>%1 FPS<br/>%2 P. Hits<br/>%3 E. Hits</p></body></html>").arg(QString::number(frameCount/(fpsElapsedTimer.restart()/1000.0f), 'f', 0), QString::number(m_player.getTotalHits()), QString::number(m_enemy.getTotalHits()));
+        emit updateFPSHit(str);
+        frameCount=0;
+
+    }
+
     deltaTime = elapsedTimer.restart()/1000.0f;
 
     updateGame();
-
-    //se getEnemyBulletPos in range Player.GetPosition (pegar bounds do player)
-    emit updateFPSHit(QString("<html><head/><body><p>FPS: %1 ms<br/>Hits: l</p></body></html>").arg(getDeltaTime()*1000));
 
     update();
 }
@@ -286,4 +387,37 @@ void OpenGLWidget::animate()
 float OpenGLWidget::getDeltaTime()
 {
     return deltaTime;
+}
+
+
+void OpenGLWidget::restartButton()
+{
+    restart();
+}
+
+void OpenGLWidget::updateBackground(int type)
+{
+    makeCurrent();
+
+    switch (type)
+    {
+        case 0:
+            if(!normalBackground)
+            {
+                glClearColor(0,0,0,1);
+                hitDamageElapsedTimer.restart();
+                normalBackground = true;
+            }
+            break;
+        case 1:
+            glClearColor(0.1,0.1,0.7,1);
+            hitDamageElapsedTimer.restart();
+            normalBackground = false;
+            break;
+        case 2:
+            glClearColor(0.7,0.1,0.1,1);
+            hitDamageElapsedTimer.restart();
+            normalBackground = false;
+            break;
+    }
 }

@@ -16,9 +16,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     openglwidget.cpp \
-    player.cpp \
-    power.cpp \
-    starlayers.cpp
+    player.cpp
 
 HEADERS += \
     bullets.h \
@@ -26,9 +24,7 @@ HEADERS += \
     gamedata.h \
     mainwindow.h \
     openglwidget.h \
-    player.h \
-    power.h \
-    starlayers.h
+    player.h
 
 FORMS += \
     mainwindow.ui

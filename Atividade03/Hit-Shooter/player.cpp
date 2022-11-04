@@ -24,22 +24,24 @@ void Player::create(GLuint program)
 
     m_rotation = 0.0f;
     m_velocity = 2.0f;
-    m_scale = 0.250f;
+    m_scale = 0.100f;
     m_position[0] = 0.0f;
+    m_position[1] = -0.8f;
+    totalHits = 0;
 
     array vertices{
                     // Ship body
-                      array{1.0f, -1.0f, 0.0f, 1.0f}
-                    , array{-1.0f, -1.0f, 0.0f, 1.0f}
-                    , array{-1.0f, 1.0f, 0.0f, 1.0f}
-                    , array{1.0f, 1.0f, 0.0f, 1.0f}
+                      array{-1.0f, -1.0f, 0.0f, 1.0f}
+                    , array{0.0f, -0.5f, 0.0f, 1.0f}
+                    , array{1.0f, -1.0f, 0.0f, 1.0f}
+                    , array{0.0f, 1.0f, 0.0f, 1.0f}
                    };
 
     array colors{
-                         array{0.6f,0.5f,0.5f,1.0f}
-                       , array{0.5f,0.5f,0.5f,1.0f}
-                       , array{0.5f,0.5f,0.5f,1.0f}
-                       , array{0.5f,0.5f,0.5f,1.0f}
+                         array{0.5f,0.5f,0.9f,1.0f}
+                       , array{0.5f,0.5f,0.9f,1.0f}
+                       , array{0.5f,0.5f,0.9f,1.0f}
+                       , array{0.5f,0.5f,0.9f,1.0f}
                  };
 
     // Normalização para o intervalo [-1,1]
@@ -48,8 +50,8 @@ void Player::create(GLuint program)
         position[1] /= 1.0f;
     }
 
-    array const indices{0, 1, 2
-                        ,2, 3, 0
+    array const indices{0, 1, 3
+                        ,1, 2, 3
                        };
     // clang-format on
 
@@ -80,6 +82,9 @@ void Player::create(GLuint program)
     glGenBuffers(1, &m_EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices.data(), GL_STATIC_DRAW);
+
+
+    m_bullets.create(program);
 }
 
 void Player::destroy()
@@ -92,6 +97,10 @@ void Player::destroy()
         glDeleteBuffers(1, &m_VBOColors);
         glDeleteVertexArrays(1, &m_VAO);
         wasInitialized = false;
+        totalHits = 0;
+
+        m_bullets.destroy();
+
     }
 
 }
@@ -110,6 +119,10 @@ void Player::paint(GameData const &gameData)
 {
     if (gameData.m_state != State::Playing) return;
 
+    //Caso o player tenha atirado, a bala será renderizada.
+    if (isShooting)
+        m_bullets.paint(gameData);
+
     glUseProgram(m_program);
 
     glBindVertexArray(m_VAO);
@@ -126,33 +139,103 @@ void Player::paint(GameData const &gameData)
 
     glUseProgram(0);
 
-
 }
 
 void Player::updateGame(GameData const &gameData, float deltaTime)
 {
+    int keyRight{1};
     int keyUp{1};
 
     if (gameData.m_input[static_cast<size_t>(Input::Right)])
     {
         m_position[0] += m_velocity * deltaTime;
-        keyUp = 1;
+        keyRight = 1;
     }
 
     if (gameData.m_input[static_cast<size_t>(Input::Left)])
     {
         m_position[0] -= m_velocity * deltaTime;
+        keyRight = -1;
+    }
+
+    if (gameData.m_input[static_cast<size_t>(Input::Up)])
+    {
+        m_position[1] += m_velocity * deltaTime;
+        keyUp = 1;
+    }
+
+    if (gameData.m_input[static_cast<size_t>(Input::Down)])
+    {
+        m_position[1] -= m_velocity * deltaTime;
         keyUp = -1;
     }
 
+    if (gameData.m_input[static_cast<size_t>(Input::Fire)])
+        shoot();
+
     if (abs(m_position[0]) > 0.9f )
-        m_position[0] = 0.9f * keyUp;
+        m_position[0] = 0.9f * keyRight;
+
+    if (abs(m_position[1]) > 0.9f)
+        m_position[1] = 0.9f * keyUp;
+    else if(abs(m_position[1]) < 0.1f)
+        m_position[1] = -0.1f * keyUp;
+
+
+    isMovementPressed = gameData.m_input[static_cast<size_t>(Input::Right)] ||
+            gameData.m_input[static_cast<size_t>(Input::Left)] ||
+            gameData.m_input[static_cast<size_t>(Input::Up)] ||
+            gameData.m_input[static_cast<size_t>(Input::Down)];
+
+    if(isShooting)
+    {
+        m_bullets.updateGame(gameData, deltaTime);
+
+        if(getBulletPosition()[1] > 1.0f)
+            isShooting = false;
+    }
 
     update();
-    cout << deltaTime;
+}
+
+void Player::shoot()
+{
+    if (!isShooting)
+    {
+        //can shoot.
+        isShooting = true;
+
+        m_bullets.shoot(getPosition(), 0.05, !isMovementPressed);
+        //comando para paint de bullet
+    }
+}
+
+void Player::stopShooting()
+{
+    isShooting = false;
+}
+
+bool Player::getIsShooting()
+{
+    return isShooting;
 }
 
 std::vector<float> Player::getPosition()
 {
     return m_position;
+}
+
+int Player::getTotalHits()
+{
+    return totalHits;
+}
+
+void Player::addHit()
+{
+    totalHits++;
+}
+
+std::vector<float> Player::getBulletPosition()
+{
+    return m_bullets.getBulletPosition();
 }

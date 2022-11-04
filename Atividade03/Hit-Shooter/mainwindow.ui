@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>962</width>
-    <height>680</height>
+    <height>860</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -74,7 +74,7 @@
          <x>0</x>
          <y>0</y>
          <width>961</width>
-         <height>681</height>
+         <height>861</height>
         </rect>
        </property>
        <widget class="QWidget" name="page">
@@ -87,7 +87,7 @@
            <x>0</x>
            <y>0</y>
            <width>961</width>
-           <height>681</height>
+           <height>861</height>
           </rect>
          </property>
          <property name="sizePolicy">
@@ -147,10 +147,10 @@ color: rgb(255, 255, 255);</string>
         <widget class="QLabel" name="lblHitsAndFrames">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>10</y>
-           <width>211</width>
-           <height>71</height>
+           <x>830</x>
+           <y>760</y>
+           <width>121</width>
+           <height>91</height>
           </rect>
          </property>
          <property name="font">
@@ -176,7 +176,7 @@ color: rgb(255, 255, 255);</string>
           <enum>QFrame::Plain</enum>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;FPS: x ms&lt;br/&gt;Hits: y&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;FPS: x ms&lt;br/&gt;Hits Player: y&lt;br/&gt;Hits Enemy: x&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="scaledContents">
           <bool>false</bool>
@@ -192,6 +192,38 @@ color: rgb(255, 255, 255);</string>
          </property>
          <property name="indent">
           <number>0</number>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btnRestart">
+         <property name="geometry">
+          <rect>
+           <x>410</x>
+           <y>320</y>
+           <width>121</width>
+           <height>61</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>RESTART</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>830</y>
+           <width>561</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="text">
+          <string>W, A, S, D to move (or arrow keys). Space to shoot. Shooting while moving will result in a slower projectile.</string>
          </property>
         </widget>
        </widget>
@@ -211,6 +243,8 @@ color: rgb(255, 255, 255);</string>
     <signal>updateEndGameLabel(QString)</signal>
     <signal>updateEndGameVisibility(bool)</signal>
     <signal>updateFPSHit(QString)</signal>
+    <signal>updateRestartButton(bool)</signal>
+    <slot>restartButton()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -264,6 +298,38 @@ color: rgb(255, 255, 255);</string>
     <hint type="destinationlabel">
      <x>60</x>
      <y>45</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>openGLWidget</sender>
+   <signal>updateRestartButton(bool)</signal>
+   <receiver>btnRestart</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>480</x>
+     <y>430</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>470</x>
+     <y>350</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnRestart</sender>
+   <signal>clicked()</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>restartButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>470</x>
+     <y>350</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>480</x>
+     <y>430</y>
     </hint>
    </hints>
   </connection>

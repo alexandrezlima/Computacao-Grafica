@@ -5,9 +5,9 @@ debug/main.o
 debug/mainwindow.o
 debug/openglwidget.o
 debug/player.o
-debug/power.o
-debug/starlayers.o
 debug/qrc_resources.o
+debug/moc_bullets.o
+debug/moc_enemy.o
 debug/moc_mainwindow.o
 debug/moc_openglwidget.o
 debug/moc_player.o

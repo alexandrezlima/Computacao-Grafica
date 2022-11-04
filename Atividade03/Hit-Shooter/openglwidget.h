@@ -14,9 +14,6 @@
 #include "gamedata.h"
 #include "player.h"
 #include "enemy.h"
-#include "bullets.h"
-#include "power.h"
-#include "starlayers.h"
 
 class OpenGLWidget : public QOpenGLWidget, public QOpenGLFunctions_4_0_Core
 {
@@ -28,8 +25,11 @@ public:
     ~OpenGLWidget();
     float getDeltaTime();
     void createShaders();
+    void createStarsShaders();
     void destroy();
     void restart(); //Para reiniciar o jogo.
+    void checkCollisions(); //Verifica colisões.
+    void checkWinCondition(); //Verifica se o player venceu ou perdeu.
 
 protected:
    void initializeGL(); //Chamado uma vez antes das outras funções abaixo.
@@ -46,25 +46,33 @@ protected:
 private:
     QTimer timer;
     QElapsedTimer elapsedTimer;
+    QElapsedTimer fpsElapsedTimer;
+    QElapsedTimer hitDamageElapsedTimer;
+    int frameCount{0};
 
     GLuint m_objectsProgram{0};  //Identificador do par de shaders objects frag e vert.
+    GLuint m_starsProgram{0};
 
     GameData m_gameData;
     Player m_player;
     Enemy m_enemy;
 
     bool showingEndGame{false};
+    bool normalBackground{true};
 
     std::default_random_engine m_randomEngine;
     float deltaTime{0};
+    void updateBackground(int type); //0 = normal, 1 = player, 2 = enemy.
 
 signals:
     void updateEndGameLabel(QString);
     void updateEndGameVisibility(bool);
     void updateFPSHit(QString);
+    void updateRestartButton(bool);
 
 public slots:
     void animate();
+    void restartButton();
 };
 
 
