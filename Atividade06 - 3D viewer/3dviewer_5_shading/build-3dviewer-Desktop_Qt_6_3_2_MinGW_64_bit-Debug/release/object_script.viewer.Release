@@ -1,0 +1,11 @@
+release/camera.o
+release/light.o
+release/main.o
+release/mainwindow.o
+release/material.o
+release/model.o
+release/openglwidget.o
+release/trackball.o
+release/qrc_resources.o
+release/moc_mainwindow.o
+release/moc_openglwidget.o

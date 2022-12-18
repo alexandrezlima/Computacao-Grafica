@@ -1,0 +1,11 @@
+debug/camera.o
+debug/light.o
+debug/main.o
+debug/mainwindow.o
+debug/material.o
+debug/model.o
+debug/openglwidget.o
+debug/trackball.o
+debug/qrc_resources.o
+debug/moc_mainwindow.o
+debug/moc_openglwidget.o
